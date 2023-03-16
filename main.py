@@ -31,9 +31,9 @@ def get_payment_link():
         'paymentNum': str(paymentsNum),
         'description': description,
         'transactionTypes': ['1', '6', '13', '14'], #[Credit, Bit, ApplePay, GooglePay] If you don't need one of them, give it a value of '1'
-        'cField1': 'blabla',
+        'cField1': MESHULAM_PAGE_CODE,
         'cField2': 'blabla',
-        'cField3': MESHULAM_PAGE_CODE,
+        'cField3': 'blabla',
         'cField4': 'blabla',
         'cField5': 'blabla'
     }

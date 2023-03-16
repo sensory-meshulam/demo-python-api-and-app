@@ -22,7 +22,8 @@ const options = {
 }
 
 async function getPaymentLink (){
-   const response = await fetch(`/api/payment/getPaymentLink`, options); //response in format {isSuccess: boolean, message: string (link or error-message)}
+   const response = await fetch(`/api/payment/getPaymentLink`, options);
+   //response in format {isSuccess: boolean, message: string (payment-link or error-message)}
    const data = await response.json();
    console.log(data.message)
    growPayment.renderPaymentOptions(data.message)
@@ -36,6 +37,9 @@ window.addEventListener("growWalletChange", (result) => {
       resultData = res.data;
     }
     if (res.state === "close" && resultStatus) {
-      console.log(resultData) //or display success page whith resultData
+      // Now you can access the success page, and also send data to it via the URL
+      console.log(resultData);
+      const searchParams = new URLSearchParams(resultData);      
+      window.open(`http://localhost:5000/static/success.html?${searchParams.toString()}`)
     }
   });
