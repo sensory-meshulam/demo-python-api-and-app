@@ -31,11 +31,6 @@ def get_payment_link():
         'paymentNum': str(paymentsNum),
         'description': description,
         'transactionTypes': ['1', '6', '13', '14'], #[Credit, Bit, ApplePay, GooglePay] If you don't need one of them, give it a value of '1'
-        'cField1': MESHULAM_PAGE_CODE,
-        'cField2': 'blabla',
-        'cField3': 'blabla',
-        'cField4': 'blabla',
-        'cField5': 'blabla'
     }
 
     form = {}
@@ -61,62 +56,6 @@ def get_payment_link():
         return jsonify(result)
     except Exception as e:
         return '', 500
-
-@app.route('/api/payment/confirmPayment', methods=['POST'])
-def confirm_payment():
-    data = request.form.to_dict()
-    response = approve_transaction(data)
-    if response:
-        # you can save data['data'] in DB
-        return 'OK'
-    else:
-        # display error message
-        return 'Error'
-
-async def approve_transaction(details):
-    data = {
-        'apiKey': MESHULAM_API_KEY,
-        'pageCode': details['customFields[cField3]'],
-        'transactionId': str(details['transactionId']),
-        'transactionToken': details['transactionToken'],
-        'transactionTypeId': details['transactionTypeId'],
-        'paymentType': details['paymentType'],
-        'processId': str(details['processId']),
-        'sum': details['sum'],
-        'firstPaymentSum': details['firstPaymentSum'],
-        'periodicalPaymentSum': details['periodicalPaymentSum'],
-        'paymentsNum': details['paymentsNum'],
-        'allPaymentsNum': details['allPaymentsNum'],
-        'paymentDate': details['paymentDate'],
-        'asmachta': details['asmachta'],
-        'description': details['description'],
-        'fullName': details['fullName'],
-        'payerPhone': details['payerPhone'],
-        'payerEmail': details.get('payerEmail', ''),
-        'cardSuffix': details['cardSuffix'],
-        'cardType': details['cardType'],
-        'cardTypeCode': details['cardTypeCode'],
-        'cardBrand': details['cardBrand'],
-        'cardBrandCode': details['cardBrandCode'],
-        'cardExp': details['cardExp'],
-        'processToken': details['processToken']
-    }
-    response = requests.post(f'{MESHULAM_API_URL}/approveTransaction', data=data)
-    response_data = response.json()
-    if response_data['err'] and response_data['err']['message']:
-        # display error message
-        return False
-
-    async with aiohttp.ClientSession() as session:
-        try:
-            async with session.post(MESHULAM_API_URL + 'approveTransaction', data=formData) as response:
-                res = await response.json()
-                if 'err' in res and 'message' in res['err']:
-                    # display error message
-                    return res['status'] == 1
-        except Exception as error:
-            # handle error
-            dess
 
 if __name__ == '__main__':
     app.run(debug=True)
